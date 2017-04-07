@@ -37,6 +37,8 @@
         <File name="test_person_group" src="cognitive_face/tests/test_person_group.pyc" />
         <File name="util" src="cognitive_face/tests/util.py" />
         <File name="util" src="cognitive_face/tests/util.pyc" />
+        <File name="" src=".gitignore" />
+        <File name="gitignore" src="gitignore.txt" />
     </Resources>
     <Topics>
         <Topic name="sopraSteriaGreeter_enu" src="sopraSteriaGreeter/sopraSteriaGreeter_enu.top" topicName="sopraSteriaGreeter" language="en_US" />

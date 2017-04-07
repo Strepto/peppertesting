@@ -27,7 +27,7 @@
 
     def onScriptStopped(self, script_name, reason):
         if script_name == self.script_id:
-            self.logger.warning("App Script Stopped: " + self.script_id + str(reason))
+            self.logger.warning("App Script Stopped: " + self.script_id + "Reason: " + str(reason))
             self.onStopped()
             self.disconnect()
 

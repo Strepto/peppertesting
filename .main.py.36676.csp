@@ -2,12 +2,12 @@
 
 import sys
 sys.path.append("/home/nao/.local/share/PackageManager/apps/")
-import qis
+import qi
 import os
 #import numpy as NP
 import cognitive_face as CF
 import time
-
+import os
 
 
 class SopraSteriaGreeter(object):
@@ -82,7 +82,7 @@ class SopraSteriaGreeter(object):
         self.logger.info("Starting app!")
 
         # Establishing signal listeners 
-        #self.start_dialog()
+        self.start_dialog()
         self.peoplePerception.setMaximumDetectionRange(1.5)
         self.peoplePerception.justArrived.connect(self.newPersonDetected)
         #        self.faceDetected_signal = self.memory.subscriber("FaceDetected").signal
@@ -135,23 +135,31 @@ class SopraSteriaGreeter(object):
             self.logger.info("Dialog unloaded!")
         except Exception, e:
             self.logger.info("Error while unloading dialog: {}".format(e))  
+            
+    @qi.nobind
+    def create_signals(self):
+        
+        foundCandidateEvent = "sopraSteriaGreeter/bestCandidateName"
+        self.memory.declareEvent(foundCandidateEvent)
+        
+        self.logger.info("Event created!")
 
     def newPersonDetected(self, numPeople):
         
         self.textToSpeech.say('Hi there. Look me in the eyes please, I\'ll see if I can remember you.')
-        self.learnFace(numTries=2)
+        self.learnFace(numRetries=2)
         # if numPeople > 1:
         #     self.textToSpeech.say('Its too crowded here. I can see ' + str(numPeople) + ' people.')
 
-    def learnFace(self, numTries=1):
-        if(numTries > 0):
+    def learnFace(self, numRetries=1):
+        if(numRetries > 0):
             isFaceLearned = self.faceDetection.learnFace(str(time.time()))
             self.logger.info(isFaceLearned)
             if isFaceLearned:
                 self.recognizePerson()
             else:
-                self.textToSpeech.say('Hmmmm, still looking')
-                self.learnFace(numTries-1)
+                self.textToSpeech.say('Hmmmm, i cant really see your face yet.')
+                self.learnFace(numRetries-1)
 
         else:
             self.textToSpeech.say('Hide and come back for another try!')
@@ -164,7 +172,7 @@ class SopraSteriaGreeter(object):
         CF.Key.set(self.KEY)
 
         
-        face = CF.face.detect(photoPath)
+        face = CF.face.detect("https://i.imgur.com/hgErMru.png")
 
         ## Instantiating person thing
         # self.logger.info(CF.person_group.create(groupID, "Pepper"))
@@ -174,8 +182,6 @@ class SopraSteriaGreeter(object):
         # self.logger.info(CF.person.add_face('https://i.imgur.com/hgErMru.png', self.groupID, asmundID))       
         # self.logger.info(CF.person_group.train(self.groupID))
         ##
-
-        
         faceID = face[0].get('faceId')
         self.logger.info(faceID)
         detection = CF.face.identify([faceID], self.groupID, threshold=0.5)
@@ -186,10 +192,10 @@ class SopraSteriaGreeter(object):
             bestCandidateID = candidates[0].get('personId')
             bestCandidatePerson = CF.person.get(self.groupID, bestCandidateID)
             bestCandidateName = bestCandidatePerson.get('name')
-            self.textToSpeech.say('Hi, memory fault if this ends here.')
+            # self.textToSpeech.say('Hi, memory fault if this ends here.')
 
-            self.memory.insert('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
-            self.textToSpeech.say('It is so nice to see you here, ' + str(bestCandidateName) + '. What can I do for you?')
+            self.memory.insertData('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
+            # self.textToSpeech.say('It is so nice to see you here, ' + str(bestCandidateName) + '. What can I do for you?')
         else :
             self.textToSpeech.say('Could not identify you based on your looks.')
         
