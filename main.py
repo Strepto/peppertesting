@@ -7,7 +7,7 @@ import os
 #import numpy as NP
 import cognitive_face as CF
 import time
-
+import os
 
 
 class SopraSteriaGreeter(object):
@@ -135,6 +135,14 @@ class SopraSteriaGreeter(object):
             self.logger.info("Dialog unloaded!")
         except Exception, e:
             self.logger.info("Error while unloading dialog: {}".format(e))  
+            
+    @qi.nobind
+    def create_signals(self):
+        
+        foundCandidateEvent = "sopraSteriaGreeter/bestCandidateName"
+        self.memory.declareEvent(foundCandidateEvent)
+        
+        self.logger.info("Event created!")
 
     def newPersonDetected(self, numPeople):
         
@@ -174,8 +182,6 @@ class SopraSteriaGreeter(object):
         # self.logger.info(CF.person.add_face('https://i.imgur.com/hgErMru.png', self.groupID, asmundID))       
         # self.logger.info(CF.person_group.train(self.groupID))
         ##
-
-        
         faceID = face[0].get('faceId')
         self.logger.info(faceID)
         detection = CF.face.identify([faceID], self.groupID, threshold=0.5)

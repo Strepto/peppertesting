@@ -13,4 +13,4 @@ language: enu
 u: (e:PeoplePerception/JustArrived) Hello dialog! 
 
 
-u: (e:sopraSteriaGreeter/bestCandidateName) 'It is so nice to see you here, $sopraSteriaGreeter/bestCandidateName . What can I do for you?'
+u: (e:sopraSteriaGreeter/bestCandidateName) It is so nice to see you here, $sopraSteriaGreeter/bestCandidateName . What can I do for you?
