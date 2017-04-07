@@ -6,7 +6,7 @@ import qi
 #import numpy as NP
 import cognitive_face as CF
 import time
-
+import os
 
 
 class SopraSteriaGreeter(object):
@@ -80,7 +80,7 @@ class SopraSteriaGreeter(object):
         print "Starting app..."
         
         # Establishing signal listeners 
-		self.start_dialog()
+        self.start_dialog()
         self.peoplePerception.setMaximumDetectionRange(1.5)
         self.peoplePerception.justArrived.connect(self.newPersonDetected)
 #        self.faceDetected_signal = self.memory.subscriber("FaceDetected").signal
@@ -133,6 +133,14 @@ class SopraSteriaGreeter(object):
             self.logger.info("Dialog unloaded!")
         except Exception, e:
             self.logger.info("Error while unloading dialog: {}".format(e))  
+            
+    @qi.nobind
+    def create_signals(self):
+        
+        foundCandidateEvent = "sopraSteriaGreeter/bestCandidateName"
+        self.memory.declareEvent(foundCandidateEvent)
+        
+        self.logger.info("Event created!")
 
     def newPersonDetected(self, numPeople):
         
@@ -165,11 +173,11 @@ class SopraSteriaGreeter(object):
         
         face = CF.face.detect(photoPath)
         # self.logger.info(CF.person_group.create(groupID, "Pepper"))
-        asmund = CF.person.create(self.groupID, "AAsmund Pedersen Hugo")
+        #asmund = CF.person.create(self.groupID, "Osmund Pedersen Hugo")
         # asmund = CF.person.get(groupID, '8d11e6d0-1163-4adc-a271-b66e315d9277')
-        asmundID = asmund.get('personId')
-        self.logger.info(CF.person.add_face('https://i.imgur.com/hgErMru.png', self.groupID, asmundID))       
-        self.logger.info(CF.person_group.train(self.groupID))
+        #asmundID = asmund.get('personId')
+        #self.logger.info(CF.person.add_face('https://i.imgur.com/hgErMru.png', self.groupID, asmundID))       
+        #self.logger.info(CF.person_group.train(self.groupID))
         # img_url = 'https://i.imgur.com/N1pdwVu.png'
         # face = CF.face.detect(img_url)
         faceID = face[0].get('faceId')
@@ -182,7 +190,7 @@ class SopraSteriaGreeter(object):
             bestCandidateID = candidates[0].get('personId')
             bestCandidatePerson = CF.person.get(self.groupID, bestCandidateID)
             bestCandidateName = bestCandidatePerson.get('name')
-			self.memory.insert('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
+            self.memory.insert('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
             self.textToSpeech.say('It is so nice to see you here, ' + str(bestCandidateName) + '. What can I do for you?')
         else :
             self.textToSpeech.say('Could not identify you based on your looks.')
