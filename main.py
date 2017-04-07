@@ -167,12 +167,16 @@ class SopraSteriaGreeter(object):
 
     def recognizePerson(self):
         self.textToSpeech.say('You look great today.')
-        photoPath = self.takePhoto()
-        self.logger.info(photoPath)
         CF.Key.set(self.KEY)
 
+        ## When running on Pepper, we should use the local photos taken.
+        # photoPath = self.takePhoto()
+        # self.logger.info(photoPath)
+        #face = CF.face.detect(photoPath)
         
+        ## When running on PC, ignore the Photo stuff and check through an online image. 
         face = CF.face.detect("https://i.imgur.com/hgErMru.png")
+
 
         ## Instantiating person thing
         # self.logger.info(CF.person_group.create(groupID, "Pepper"))
