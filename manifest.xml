@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<package version="0.0.0" uuid="sopraSteriaGreeter">
+ <names>
+  <name lang="en_US">SopraSteriaGreeter</name>
+ </names>
+ <supportedLanguages>
+  <language>en_US</language>
+ </supportedLanguages>
+ <descriptionLanguages>
+  <language>en_US</language>
+ </descriptionLanguages>
+ <contents>
+  <behaviorContent path=".">
+   <userRequestable/>
+   <nature>interactive</nature>
+   <permissions/>
+  </behaviorContent>
+ </contents>
+ <requirements>
+  <naoqiRequirement minVersion="2.5" maxVersion="2.5"/>
+  <robotRequirement model="JULIETTE_Y20"/>
+ </requirements>
+ <services>
+  <service name="SopraSteriaGreeter" execStart="main.py" autorun="false"/>
+ </services>
+ <executableFiles>
+  <file path="main.py"/>
+ </executableFiles>
+</package>
