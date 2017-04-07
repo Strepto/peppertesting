@@ -4,7 +4,9 @@
     <BehaviorDescriptions>
         <BehaviorDescription name="behavior" src="." xar="behavior.xar" />
     </BehaviorDescriptions>
-    <Dialogs />
+    <Dialogs>
+        <Dialog name="sopraSteriaGreeter" src="sopraSteriaGreeter/sopraSteriaGreeter.dlg" />
+    </Dialogs>
     <Resources>
         <File name="main" src="main.py" />
         <File name="__init__" src="cognitive_face/__init__.py" />
@@ -36,12 +38,14 @@
         <File name="util" src="cognitive_face/tests/util.py" />
         <File name="util" src="cognitive_face/tests/util.pyc" />
     </Resources>
-    <Topics />
+    <Topics>
+        <Topic name="sopraSteriaGreeter_enu" src="sopraSteriaGreeter/sopraSteriaGreeter_enu.top" topicName="sopraSteriaGreeter" language="en_US" />
+    </Topics>
     <IgnoredPaths>
         <Path src=".vscode/.ropeproject" />
-        <Path src=".metadata" />
-        <Path src=".vscode/.ropeproject/objectdb" />
         <Path src=".vscode" />
+        <Path src=".vscode/.ropeproject/objectdb" />
+        <Path src=".metadata" />
         <Path src=".vscode/.ropeproject/config.py" />
     </IgnoredPaths>
     <Translations auto-fill="en_US">

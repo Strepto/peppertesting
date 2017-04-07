@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package version="0.0.0" uuid="sopraSteriaGreeter">
+<package uuid="sopraSteriaGreeter" version="0.0.0">
  <names>
   <name lang="en_US">SopraSteriaGreeter</name>
  </names>
@@ -21,7 +21,7 @@
   <robotRequirement model="JULIETTE_Y20"/>
  </requirements>
  <services>
-  <service name="SopraSteriaGreeter" execStart="main.py" autorun="false"/>
+  <service execStart="main.py" name="SopraSteriaGreeter" autorun="false"/>
  </services>
  <executableFiles>
   <file path="main.py"/>

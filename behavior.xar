@@ -21,13 +21,13 @@
     def onInput_onStart(self):
         self.listener_id = self.script_manager.serviceStopped.connect(self.onScriptStopped)
         if not self.script_manager.startService(self.script_id):
-            self.log("Failed to start App Script %s, stopping." % repr(self.script_id))
+            self.logger.warning("Failed to start App Script %s, stopping." % repr(self.script_id))
             self.onStopped()
             self.disconnect()
 
     def onScriptStopped(self, script_name, reason):
         if script_name == self.script_id:
-            self.log("App Script Stopped: " + self.script_id)
+            self.logger.warning("App Script Stopped: " + self.script_id + str(reason))
             self.onStopped()
             self.disconnect()
 
