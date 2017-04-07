@@ -2,12 +2,11 @@
 
 import sys
 sys.path.append("/home/nao/.local/share/PackageManager/apps/")
-import qi
 import os
+import qi
 #import numpy as NP
 import cognitive_face as CF
 import time
-import os
 
 
 class SopraSteriaGreeter(object):
@@ -80,7 +79,7 @@ class SopraSteriaGreeter(object):
         # do something when the service starts
         print "Starting app..."
         self.logger.info("Starting app!")
-
+        self.create_signals()
         # Establishing signal listeners 
         self.start_dialog()
         self.peoplePerception.setMaximumDetectionRange(1.5)
@@ -108,6 +107,7 @@ class SopraSteriaGreeter(object):
     def cleanup(self):
         # called when your module is stopped
         self.logger.info("Cleaning...")
+        self.stop_dialog()
         # @TODO: insert cleaning functions here
         self.logger.info("Cleaned!")
 
@@ -118,9 +118,14 @@ class SopraSteriaGreeter(object):
         topic_path = os.path.realpath(os.path.join(dir_path, "sopraSteriaGreeter", "sopraSteriaGreeter_enu.top"))
         self.logger.info("File is: {}".format(topic_path))
         try:
-            self.loaded_topic = self.dialog.loadTopic(topic_path)
+            self.dialog.setLanguage("English")
+
+            with open(topic_path, 'r') as myfile:
+                data=myfile.read()
+                self.loaded_topic = self.dialog.loadTopicContent(data)
+            
             self.dialog.activateTopic(self.loaded_topic)
-            self.ialog.subscribe(self.service_name)
+            self.dialog.subscribe(self.service_name)
             self.logger.info("Dialog loaded!")
         except Exception, e:
             self.logger.info("Error while loading dialog: {}".format(e))
@@ -130,6 +135,8 @@ class SopraSteriaGreeter(object):
         self.logger.info("Unloading dialog")
         try:
             self.dialog.unsubscribe(self.service_name)
+            # self.dialog.deactivateTopic("/tmp/tmp.top")
+            # self.dialog.unloadTopic("/tmp/tmp.top")
             self.dialog.deactivateTopic(self.loaded_topic)
             self.dialog.unloadTopic(self.loaded_topic)
             self.logger.info("Dialog unloaded!")
@@ -142,6 +149,7 @@ class SopraSteriaGreeter(object):
         foundCandidateEvent = "sopraSteriaGreeter/bestCandidateName"
         self.memory.declareEvent(foundCandidateEvent)
         
+
         self.logger.info("Event created!")
 
     def newPersonDetected(self, numPeople):
@@ -167,12 +175,16 @@ class SopraSteriaGreeter(object):
 
     def recognizePerson(self):
         self.textToSpeech.say('You look great today.')
-        photoPath = self.takePhoto()
-        self.logger.info(photoPath)
         CF.Key.set(self.KEY)
 
+        ## When running on Pepper, we should use the local photos taken.
+        # photoPath = self.takePhoto()
+        # self.logger.info(photoPath)
+        #face = CF.face.detect(photoPath)
         
+        ## When running on PC, ignore the Photo stuff and check through an online image. 
         face = CF.face.detect("https://i.imgur.com/hgErMru.png")
+
 
         ## Instantiating person thing
         # self.logger.info(CF.person_group.create(groupID, "Pepper"))
@@ -193,9 +205,8 @@ class SopraSteriaGreeter(object):
             bestCandidatePerson = CF.person.get(self.groupID, bestCandidateID)
             bestCandidateName = bestCandidatePerson.get('name')
             # self.textToSpeech.say('Hi, memory fault if this ends here.')
-
-            self.memory.insertData('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
-            # self.textToSpeech.say('It is so nice to see you here, ' + str(bestCandidateName) + '. What can I do for you?')
+            
+            self.memory.raiseEvent('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
         else :
             self.textToSpeech.say('Could not identify you based on your looks.')
         
