@@ -80,8 +80,8 @@ class SopraSteriaGreeter(object):
         print "Starting app..."
         
         # Establishing signal listeners 
+		self.start_dialog()
         self.peoplePerception.setMaximumDetectionRange(1.5)
-        self.textToSpeech.say("YOLO")
         self.peoplePerception.justArrived.connect(self.newPersonDetected)
 #        self.faceDetected_signal = self.memory.subscriber("FaceDetected").signal
 #        self.faceDetected_signal.connect(self.recognizePerson())
@@ -108,6 +108,31 @@ class SopraSteriaGreeter(object):
         self.logger.info("Cleaning...")
         # @TODO: insert cleaning functions here
         self.logger.info("Cleaned!")
+
+    @qi.nobind
+    def start_dialog(self):
+        self.logger.info("Loading dialog")
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        topic_path = os.path.realpath(os.path.join(dir_path, "sopraSteriaGreeter", "sopraSteriaGreeter_enu.top"))
+        self.logger.info("File is: {}".format(topic_path))
+        try:
+            self.loaded_topic = self.dialog.loadTopic(topic_path)
+            self.dialog.activateTopic(self.loaded_topic)
+            self.ialog.subscribe(self.service_name)
+            self.logger.info("Dialog loaded!")
+        except Exception, e:
+            self.logger.info("Error while loading dialog: {}".format(e))
+
+    @qi.nobind
+    def stop_dialog(self):
+        self.logger.info("Unloading dialog")
+        try:
+            self.dialog.unsubscribe(self.service_name)
+            self.dialog.deactivateTopic(self.loaded_topic)
+            self.dialog.unloadTopic(self.loaded_topic)
+            self.logger.info("Dialog unloaded!")
+        except Exception, e:
+            self.logger.info("Error while unloading dialog: {}".format(e))  
 
     def newPersonDetected(self, numPeople):
         
@@ -157,6 +182,7 @@ class SopraSteriaGreeter(object):
             bestCandidateID = candidates[0].get('personId')
             bestCandidatePerson = CF.person.get(self.groupID, bestCandidateID)
             bestCandidateName = bestCandidatePerson.get('name')
+			self.memory.insert('sopraSteriaGreeter/bestCandidateName', bestCandidateName)
             self.textToSpeech.say('It is so nice to see you here, ' + str(bestCandidateName) + '. What can I do for you?')
         else :
             self.textToSpeech.say('Could not identify you based on your looks.')

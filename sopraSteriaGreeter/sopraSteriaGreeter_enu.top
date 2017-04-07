@@ -1,0 +1,16 @@
+topic: ~sopraSteriaGreeter()
+language: enu
+
+# Defining extra concepts out of words or group of words
+#concept:(hello) [hello hi hey "good morning" greetings]
+
+# Catching inputs and triggering outputs
+#u:(e:onStart) $onStopped=1
+
+# Replying to speech
+#u:(~hello) ~hello
+
+u: (e:PeoplePerception/JustArrived) Hello dialog! 
+
+
+u: (e:sopraSteriaGreeter/bestCandidateName) 'It is so nice to see you here, $sopraSteriaGreeter/bestCandidateName . What can I do for you?'
