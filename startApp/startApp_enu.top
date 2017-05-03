@@ -1,0 +1,6 @@
+topic: ~startApp()
+language: enu
+include: lexicon_enu.top
+
+u: (start greeter) are you sure you want to start the greeter?
+u1: (~yes) ok ^switchFocus(greeterdebug-12321/.)

@@ -1,0 +1,25 @@
+topic: ~greeterDialog()
+language: enu
+
+# Include the basic channel lexicon, detailed here: http://doc.aldebaran.com/2-5/naoqi/interaction/dialog/lexicon.html
+# and here: http://doc.aldebaran.com/2-5/naoqi/interaction/dialog/lexicon_english.html
+include: lexicon_enu.top
+
+
+# Defining extra concepts out of words or group of words
+concept:(hello) [hello hi hey greetings yo]
+
+# Catching inputs and triggering outputs
+u:(e:onStart) Greetings
+
+# Replying to speech
+#u:(~hello) Yolo
+
+u: (e:PeoplePerception/JustArrived) ~hello 
+
+
+u: (e:greeterdebug-12321/bestCandidateName) Ah, i know you. It is so nice to see you here $greeterdebug-12321/bestCandidateName . What can I do for you?
+    u1:(~can_you dance) Do you want me to dance?
+        u2:(~yes) Okay, let’s dance!
+        u:(~no) Let’s do something else then!
+    u1:(~help) ~you_didnt_understand 

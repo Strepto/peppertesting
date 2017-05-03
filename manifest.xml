@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<package uuid="sopraSteriaGreeter" version="0.0.0">
+<package uuid="greeterdebug-12321" version="0.0.1">
  <names>
-  <name lang="en_US">SopraSteriaGreeter</name>
+  <name lang="en_US">GreeterDebug</name>
  </names>
  <supportedLanguages>
   <language>en_US</language>
@@ -13,15 +13,19 @@
   <behaviorContent path=".">
    <userRequestable/>
    <nature>interactive</nature>
+   <triggerSentences>
+    <sentence lang="en_US">start greeter</sentence>
+   </triggerSentences>
+   <loadingResponses/>
+   <autonomous/>
    <permissions/>
   </behaviorContent>
+  <dialogContent typeVersion="1.0" topicName="startApp">
+   <topic language="en_US" path="startApp/startApp_enu.top"/>
+  </dialogContent>
  </contents>
- <requirements>
-  <naoqiRequirement minVersion="2.5" maxVersion="2.5"/>
-  <robotRequirement model="JULIETTE_Y20"/>
- </requirements>
  <services>
-  <service execStart="main.py" name="SopraSteriaGreeter" autorun="false"/>
+  <service execStart="main.py" name="PythonAppMain" autorun="false"/>
  </services>
  <executableFiles>
   <file path="main.py"/>

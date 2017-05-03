@@ -29,7 +29,7 @@ personsListInAzure = CF.person.lists(groupID)
 namesInAzure = [str(person.get('name').lower()) for person in personsListInAzure]
 print namesInAzure
 
-files = glob.glob("C:/Users/ahugo/Documents/Pepper/New folder/photo/*")
+files = glob.glob('D:/Profiles/nhals/OneDrive - Sopra Steria/Nils Henrik Hals/Pepper Robot/SteriaGreeterDebug/SteriaGreeterDebug/utils/photo/*')
 print files
 for filePath in files:
     if filePath.endswith(".png") or filePath.endswith(".jpg"):
@@ -46,5 +46,10 @@ for filePath in files:
             time.sleep(6)
         else:
             print 'Person already in Azure ' + personName    
-        
+
+print "Scanning directory ended and photos added."
+print "Training Azure..."
 CF.person_group.train(groupID)
+print "Done!"
+print "Program Completed."
+
